@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:agora_rtc_engine/rtc_engine.dart';
+import 'package:agora_rtc_engine/rtc_engine.dart' as agorartc;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -16,7 +16,7 @@ class IndexState extends State<IndexPage> {
   final _channelController = TextEditingController();
   bool _validateError = false;
 
-  ClientRole _role = ClientRole.Broadcaster;
+  agorartc.ClientRole _role = agorartc.ClientRole.Broadcaster;
 
   @override
   void dispose() {
@@ -28,6 +28,7 @@ class IndexState extends State<IndexPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Color(0xff171717),
       body: Column(
         children: [
           SizedBox(
@@ -49,6 +50,7 @@ class IndexState extends State<IndexPage> {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w700,
+                color: Color(0xffe6e6e6),
               ),
             ),
           ),
@@ -59,17 +61,35 @@ class IndexState extends State<IndexPage> {
             margin: EdgeInsets.symmetric(horizontal: size.width * 4 / 100),
             width: double.infinity,
             child: TextFormField(
+              style: TextStyle(
+                color: Color(0xffe6e6e6),
+              ),
               controller: _channelController,
               keyboardType: TextInputType.text,
+              cursorColor: Color(0xff099DFD),
               decoration: InputDecoration(
                 errorText: _validateError ? 'Channel name is mandatory' : null,
                 border: UnderlineInputBorder(
                   borderSide: BorderSide(width: 1),
                 ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color(0xff099DFD),
+                  ),
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color(0xffe6e6e6),
+                  ),
+                ),
                 hintText: 'Channel name',
+                hintStyle: TextStyle(
+                  color: Color(0xffe6e6e6),
+                ),
                 prefixIcon: Icon(
                   FontAwesomeIcons.video,
                   size: 20,
+                  color: Color(0xff099DFD),
                 ),
               ),
             ),
@@ -78,11 +98,17 @@ class IndexState extends State<IndexPage> {
             height: size.height * 3 / 100,
           ),
           ListTile(
-            title: Text("Join as a Broadcaster"),
+            title: Text(
+              "Join as a Broadcaster",
+              style: TextStyle(
+                color: Color(0xffe6e6e6),
+              ),
+            ),
             leading: Radio(
-              value: ClientRole.Broadcaster,
+              value: agorartc.ClientRole.Broadcaster,
+              activeColor: Color(0xff099DFD),
               groupValue: _role,
-              onChanged: (ClientRole value) {
+              onChanged: (agorartc.ClientRole value) {
                 setState(() {
                   _role = value;
                 });
@@ -90,11 +116,17 @@ class IndexState extends State<IndexPage> {
             ),
           ),
           ListTile(
-            title: Text("Join as a Spectator"),
+            title: Text(
+              "Join as a Spectator",
+              style: TextStyle(
+                color: Color(0xffe6e6e6),
+              ),
+            ),
             leading: Radio(
-              value: ClientRole.Audience,
+              value: agorartc.ClientRole.Audience,
+              activeColor: Color(0xff099DFD),
               groupValue: _role,
-              onChanged: (ClientRole value) {
+              onChanged: (agorartc.ClientRole value) {
                 setState(() {
                   _role = value;
                 });
@@ -108,7 +140,7 @@ class IndexState extends State<IndexPage> {
             padding: EdgeInsets.all(size.height * 1 / 100),
             width: size.width * 40 / 100,
             decoration: BoxDecoration(
-              color: Colors.blueAccent,
+              color: Color(0xff099DFD),
               borderRadius: BorderRadius.all(
                 Radius.circular(20),
               ),
@@ -124,8 +156,7 @@ class IndexState extends State<IndexPage> {
                   ),
                 ),
               ),
-              color: Colors.blueAccent,
-              textColor: Colors.white,
+              textColor: Color(0xffe6e6e6),
             ),
           ),
         ],
