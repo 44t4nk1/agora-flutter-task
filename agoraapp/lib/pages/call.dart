@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:agora_rtc_engine/rtc_engine.dart';
+import 'package:agora_rtc_engine/rtc_engine.dart' as agorartc;
 import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
 import 'package:flutter/material.dart';
@@ -12,7 +12,7 @@ class CallPage extends StatefulWidget {
   final String channelName;
 
   /// non-modifiable client role of the page
-  final ClientRole role;
+  final agorartc.ClientRole role;
 
   /// Creates a call page with given channel name.
   const CallPage({Key key, this.channelName, this.role}) : super(key: key);
@@ -25,7 +25,7 @@ class _CallPageState extends State<CallPage> {
   final _users = <int>[];
   final _infoStrings = <String>[];
   bool muted = false;
-  RtcEngine _engine;
+  agorartc.RtcEngine _engine;
 
   @override
   void dispose() {
@@ -58,23 +58,23 @@ class _CallPageState extends State<CallPage> {
     await _initAgoraRtcEngine();
     _addAgoraEventHandlers();
     await _engine.enableWebSdkInteroperability(true);
-    VideoEncoderConfiguration configuration = VideoEncoderConfiguration();
-    configuration.dimensions = VideoDimensions(1920, 1080);
+    agorartc.VideoEncoderConfiguration configuration = agorartc.VideoEncoderConfiguration();
+    configuration.dimensions = agorartc.VideoDimensions(1920, 1080);
     await _engine.setVideoEncoderConfiguration(configuration);
     await _engine.joinChannel(Token, widget.channelName, null, 0);
   }
 
   /// Create agora sdk instance and initialize
   Future<void> _initAgoraRtcEngine() async {
-    _engine = await RtcEngine.create(APP_ID);
+    _engine = await agorartc.RtcEngine.create(APP_ID);
     await _engine.enableVideo();
-    await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
+    await _engine.setChannelProfile(agorartc.ChannelProfile.LiveBroadcasting);
     await _engine.setClientRole(widget.role);
   }
 
   /// Add agora event handlers
   void _addAgoraEventHandlers() {
-    _engine.setEventHandler(RtcEngineEventHandler(error: (code) {
+    _engine.setEventHandler(agorartc.RtcEngineEventHandler(error: (code) {
       setState(() {
         final info = 'onError: $code';
         _infoStrings.add(info);
@@ -112,7 +112,7 @@ class _CallPageState extends State<CallPage> {
   /// Helper function to get list of native views
   List<Widget> _getRenderViews() {
     final List<StatefulWidget> list = [];
-    if (widget.role == ClientRole.Broadcaster) {
+    if (widget.role == agorartc.ClientRole.Broadcaster) {
       list.add(RtcLocalView.SurfaceView());
     }
     _users.forEach((int uid) => list.add(RtcRemoteView.SurfaceView(uid: uid)));
@@ -168,7 +168,7 @@ class _CallPageState extends State<CallPage> {
 
   /// Toolbar layout
   Widget _toolbar() {
-    if (widget.role == ClientRole.Audience) return Container();
+    if (widget.role == agorartc.ClientRole.Audience) return Container();
     return Container(
       alignment: Alignment.bottomCenter,
       padding: const EdgeInsets.symmetric(vertical: 48),
