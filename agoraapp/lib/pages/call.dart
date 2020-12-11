@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:agora_rtc_engine/rtc_engine.dart' as agorartc;
 import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
+import 'package:draggable_widget/draggable_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../utils/settings.dart';
 
@@ -26,6 +28,7 @@ class _CallPageState extends State<CallPage> {
   final _infoStrings = <String>[];
   bool muted = false;
   agorartc.RtcEngine _engine;
+  DragController dragController;
 
   @override
   void dispose() {
@@ -127,10 +130,8 @@ class _CallPageState extends State<CallPage> {
   /// Video view row wrapper
   Widget _expandedVideoRow(List<Widget> views) {
     final wrappedViews = views.map<Widget>(_videoView).toList();
-    return Expanded(
-      child: Row(
-        children: wrappedViews,
-      ),
+    return Row(
+      children: wrappedViews,
     );
   }
 
@@ -144,21 +145,30 @@ class _CallPageState extends State<CallPage> {
           children: <Widget>[_videoView(views[0])],
         ));
       case 2:
-        return Container(
-            child: Stack(
+        return Stack(
           children: <Widget>[
             _expandedVideoRow([views[1]]),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(20),
+            DraggableWidget(
+              bottomMargin: 160,
+              topMargin: 50,
+              intialVisibility: true,
+              horizontalSapce: 10,
+              shadowBorderRadius: 1,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
                 ),
+                height: 200,
+                width: 100,
+                child: _expandedVideoRow([views[0]]),
               ),
-              margin: EdgeInsets.all(50),
-              child: _expandedVideoRow([views[0]]),
-            ),
+              initialPosition: AnchoringPosition.topRight,
+              dragController: dragController,
+            )
           ],
-        ));
+        );
       case 3:
         return Container(
             child: Column(
@@ -177,46 +187,67 @@ class _CallPageState extends State<CallPage> {
   /// Toolbar layout
   Widget _toolbar() {
     return Container(
+      decoration: BoxDecoration(
+        color: Color(0xff171717),
+      ),
       alignment: Alignment.bottomCenter,
-      padding: const EdgeInsets.symmetric(vertical: 20),
+      padding: const EdgeInsets.symmetric(vertical: 30),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          RawMaterialButton(
-            onPressed: _onToggleMute,
-            child: Icon(
-              muted ? Icons.mic_off : Icons.mic,
-              color: muted ? Colors.white : Colors.blueAccent,
-              size: 20.0,
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 20),
+            decoration: BoxDecoration(
+              color: Color(0xff363636),
+              borderRadius: BorderRadius.all(
+                Radius.circular(15),
+              ),
             ),
-            shape: CircleBorder(),
-            elevation: 2.0,
-            fillColor: muted ? Colors.blueAccent : Colors.white,
-            padding: const EdgeInsets.all(12.0),
+            child: FlatButton(
+              onPressed: _onToggleMute,
+              child: Icon(
+                muted ? FontAwesomeIcons.microphoneSlash : FontAwesomeIcons.microphone,
+                color: muted ? Colors.white : Color(0xff099DFD),
+                size: 20.0,
+              ),
+              padding: const EdgeInsets.all(12.0),
+            ),
           ),
-          RawMaterialButton(
-            onPressed: () => _onCallEnd(context),
-            child: Icon(
-              Icons.call_end,
-              color: Colors.white,
-              size: 35.0,
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 20),
+            decoration: BoxDecoration(
+              color: Colors.redAccent,
+              borderRadius: BorderRadius.all(
+                Radius.circular(15),
+              ),
             ),
-            shape: CircleBorder(),
-            elevation: 2.0,
-            fillColor: Colors.redAccent,
-            padding: const EdgeInsets.all(15.0),
+            child: FlatButton(
+              onPressed: () => _onCallEnd(context),
+              child: Icon(
+                FontAwesomeIcons.phone,
+                color: Colors.white,
+                size: 20.0,
+              ),
+              padding: const EdgeInsets.all(12.0),
+            ),
           ),
-          RawMaterialButton(
-            onPressed: _onSwitchCamera,
-            child: Icon(
-              Icons.switch_camera,
-              color: Colors.blueAccent,
-              size: 20.0,
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 20),
+            decoration: BoxDecoration(
+              color: Color(0xff363636),
+              borderRadius: BorderRadius.all(
+                Radius.circular(15),
+              ),
             ),
-            shape: CircleBorder(),
-            elevation: 2.0,
-            fillColor: Colors.white,
-            padding: const EdgeInsets.all(12.0),
+            child: FlatButton(
+              onPressed: _onSwitchCamera,
+              child: Icon(
+                FontAwesomeIcons.sync,
+                color: Color(0xff099DFD),
+                size: 20.0,
+              ),
+              padding: const EdgeInsets.all(12.0),
+            ),
           )
         ],
       ),
@@ -245,9 +276,11 @@ class _CallPageState extends State<CallPage> {
       body: Center(
         child: Column(
           children: <Widget>[
-            Container(
-              height: size.height * 8.5 / 10,
-              child: _viewRows(),
+            Expanded(
+              child: Container(
+                height: size.height * 8.5 / 10,
+                child: _viewRows(),
+              ),
             ),
             _toolbar(),
           ],
