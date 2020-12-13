@@ -184,7 +184,6 @@ class _CallPageState extends State<CallPage> {
     return Container();
   }
 
-  /// Toolbar layout
   Widget _toolbar() {
     return Container(
       decoration: BoxDecoration(
