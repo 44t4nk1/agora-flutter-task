@@ -1,3 +1,4 @@
+import 'package:agoraapp/pages/chat.dart';
 import 'package:flutter/material.dart';
 
 import './pages/index.dart';
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       title: 'Agora Challenege App',
-      home: IndexPage(),
+      home: ChatPage(),
     );
   }
 }

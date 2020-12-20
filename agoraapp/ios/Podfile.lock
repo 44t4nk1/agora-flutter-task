@@ -8,12 +8,15 @@ PODS:
     - Flutter
   - "permission_handler (5.0.1+1)":
     - Flutter
+  - wakelock (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - agora_rtc_engine (from `.symlinks/plugins/agora_rtc_engine/ios`)
   - Flutter (from `Flutter`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
+  - wakelock (from `.symlinks/plugins/wakelock/ios`)
 
 SPEC REPOS:
   trunk:
@@ -28,6 +31,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/integration_test/ios"
   permission_handler:
     :path: ".symlinks/plugins/permission_handler/ios"
+  wakelock:
+    :path: ".symlinks/plugins/wakelock/ios"
 
 SPEC CHECKSUMS:
   agora_rtc_engine: d86dde081cdbacc0c28c76d16cb3633c250a4741
@@ -35,6 +40,7 @@ SPEC CHECKSUMS:
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   integration_test: 5ed24a436eb7ec17b6a13046e9bf7ca4a404e59e
   permission_handler: eac8e15b4a1a3fba55b761d19f3f4e6b005d15b6
+  wakelock: bfc7955c418d0db797614075aabbc58a39ab5107
 
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 
