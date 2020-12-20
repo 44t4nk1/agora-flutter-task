@@ -11,7 +11,7 @@ class _ChatPageState extends State<ChatPage> {
   var pubnub;
   var myChannel;
   var subscription;
-  List<String> messages = [];
+  List<String> messageHistory = [];
   void initState() {
     super.initState();
     init();
@@ -34,14 +34,21 @@ class _ChatPageState extends State<ChatPage> {
           ),
           RaisedButton(
             onPressed: () async {
-              await myChannel.publish('Hello');
+              await myChannel.publish({"message": "Hello, how are you?"});
+              subscription.messages.listen((envelope) {
+                print('${envelope.uuid} sent a message: ${envelope.payload}');
+              });
               var envelope = await subscription.messages.firstWhere((envelope) => envelope.channel == 'ch1');
               var history = myChannel.messages(from: Timetoken(1234567890));
+
               var count = await history.count();
               print(count);
-              print(envelope.payload);
+
+              var messages = await history.fetch();
+              print(messages.length);
+
               setState(() {
-                messages.add(envelope.payload);
+                messageHistory.add(envelope.payload['message']);
               });
             },
             child: Text("Send"),
@@ -49,10 +56,10 @@ class _ChatPageState extends State<ChatPage> {
           Container(
             height: 300,
             child: ListView.builder(
-              itemCount: messages.length,
+              itemCount: messageHistory.length,
               itemBuilder: (context, index) {
                 return Container(
-                  child: Text(messages[index]) ?? Text("empty"),
+                  child: Text(messageHistory[index]) ?? Text("empty"),
                 );
               },
             ),
