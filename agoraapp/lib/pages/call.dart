@@ -6,6 +6,7 @@ import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
 import 'package:draggable_widget/draggable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:wakelock/wakelock.dart';
 
 import '../utils/settings.dart';
 
@@ -36,6 +37,7 @@ class _CallPageState extends State<CallPage> {
     _users.clear();
     // destroy sdk
     _engine.leaveChannel();
+    Wakelock.disable();
     _engine.destroy();
     super.dispose();
   }
@@ -43,7 +45,7 @@ class _CallPageState extends State<CallPage> {
   @override
   void initState() {
     super.initState();
-    // initialize agora sdk
+    Wakelock.enable();
     initialize();
   }
 
